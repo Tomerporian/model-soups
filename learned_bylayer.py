@@ -78,7 +78,7 @@ class AlphaWrapper(torch.nn.Module):
 
     def forward(self, inp):
         alph = self.alpha()
-        params = tuple(sum(alph[i] * p for i, p in enumerate(paramslist)))
+        params = tuple(sum(tuple(alph[i] * p[j] for j in range(len(p))) for i, p in enumerate(paramslist)))
         params = tuple(p.cuda(0) for p in params)
         load_weights(self.model, self.names, params)
         out = self.model(inp)
